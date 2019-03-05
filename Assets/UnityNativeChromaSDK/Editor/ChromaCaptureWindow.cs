@@ -68,6 +68,8 @@ class ChromaCaptureWindow : EditorWindow
     // use key presses to activate capture
     bool _mCaptureKeyDetected = false;
 
+    bool _mJustReset = false;
+
     enum Modes
     {
         Normal,
@@ -730,7 +732,14 @@ class ChromaCaptureWindow : EditorWindow
             }
             else
             {
-                UnityNativeChromaSDK.AddFrame(animationId, _mInterval, colors);
+                if (_mJustReset)
+                {
+                    UnityNativeChromaSDK.UpdateFrame(animationId, 0, _mInterval, colors);
+                }
+                else
+                {
+                    UnityNativeChromaSDK.AddFrame(animationId, _mInterval, colors);
+                }
             }
             PreviewLastFrame(animationId);
         }
@@ -882,6 +891,7 @@ class ChromaCaptureWindow : EditorWindow
 
     private void OnClickReset()
     {
+        _mJustReset = true;
         MakeAnimationReady();
 
         if (_mMode == Modes.Composite)
@@ -1018,6 +1028,11 @@ class ChromaCaptureWindow : EditorWindow
                 OnClickSave();
                 ++_mCaptureIndex;
             }
+        }
+
+        if (_mJustReset)
+        {
+            _mJustReset = false;
         }
     }
 
