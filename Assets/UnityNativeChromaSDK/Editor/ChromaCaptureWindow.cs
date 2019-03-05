@@ -1730,6 +1730,7 @@ class ChromaCaptureWindow : EditorWindow
                             if (_mCapturing)
                             {
                                 OnClickReset();
+                                _mJustReset = false;
                                 _mCaptureIndex = 0;
                             }
                             else
